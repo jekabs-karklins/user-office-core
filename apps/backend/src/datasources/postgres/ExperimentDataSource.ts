@@ -85,7 +85,10 @@ function generateExperimentId(
 }
 
 const fieldMap: { [key: string]: string } = {
-  experimentId: 'experiment_id',
+  experimentId: 'experiments.experiment_id',
+  startsAt: 'experiments.starts_at',
+  endsAt: 'experiments.ends_at',
+  'proposal.proposalId': 'proposals.proposal_id',
 };
 
 @injectable()
