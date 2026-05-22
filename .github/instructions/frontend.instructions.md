@@ -3,6 +3,10 @@ description: 'ReactJS development standards and best practices'
 applyTo: 'apps/frontend/**/*.tsx, apps/frontend/**/*.ts'
 ---
 
+# Ticket Resolution Instructions
+- Refer to the context provided in our core Copilot Space: https://github.com/copilot/spaces/UserOfficeProject/3
+https://github.com/copilot/spaces/UserOfficeProject/4
+
 # ReactJS Development Instructions
 
 Instructions for building high-quality ReactJS applications with modern patterns, hooks, and best practices following the official React documentation at https://react.dev.
