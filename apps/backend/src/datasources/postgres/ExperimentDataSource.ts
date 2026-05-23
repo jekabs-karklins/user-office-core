@@ -595,7 +595,7 @@ export default class PostgresExperimentDataSource
       )
       .leftJoin(
         'instruments',
-        'instruments.id',
+        'instruments.instrument_id',
         '=',
         'experiments.instrument_id'
       )

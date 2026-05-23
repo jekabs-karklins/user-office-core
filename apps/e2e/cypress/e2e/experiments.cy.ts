@@ -84,6 +84,59 @@ context('Experiments tests', () => {
       cy.contains('1-4 of 4');
     });
 
+    it('All the columns in experiments table are sortable', () => {
+      cy.login('officer');
+      cy.visit('/');
+      cy.get('[data-cy=officer-menu-items]').contains('Experiments').click();
+      cy.get('[value=NONE]').click();
+      cy.finishedLoading();
+
+      const getColumnValues = (columnTitle: string) =>
+        cy
+          .get('[data-cy=experiments-table] table thead tr th')
+          .then(($headers) => {
+            const columnIndex = Array.from($headers).findIndex(
+              (header) => Cypress.$(header).text().trim() === columnTitle
+            );
+            expect(columnIndex).to.be.greaterThan(-1);
+
+            return cy
+              .get('[data-cy=experiments-table] table tbody tr')
+              .then(($rows) =>
+                Array.from($rows).map((row) =>
+                  Cypress.$(row).find('td').eq(columnIndex).text().trim()
+                )
+              );
+          });
+
+      cy.wrap([
+        'Experiment ID',
+        'Proposal ID',
+        'Start',
+        'End',
+        'Instrument',
+        'Experiment Safety Status',
+      ]).each((columnTitle) => {
+        cy.get('[data-cy=experiments-table] table thead th')
+          .contains(columnTitle as string)
+          .click();
+
+        getColumnValues(columnTitle as string).then((ascendingValues) => {
+          cy.get('[data-cy=experiments-table] table thead th')
+            .contains(columnTitle as string)
+            .click();
+
+          getColumnValues(columnTitle as string).then((descendingValues) => {
+            expect(descendingValues).to.deep.equal(
+              [...ascendingValues].reverse()
+            );
+          });
+        });
+      });
+
+      cy.contains('Bad sort field given').should('not.exist');
+    });
+
     it('Can view visits', () => {
       cy.login('officer');
       cy.visit('/');
