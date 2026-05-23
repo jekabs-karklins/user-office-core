@@ -276,9 +276,9 @@ export default class VisitMutations {
         { args, user: agent }
       );
     }
-    const TODAY_MIDNIGT = new Date(new Date().setHours(0, 0, 0, 0));
+    const now = new Date();
 
-    if (args.startsAt && args.startsAt < TODAY_MIDNIGT) {
+    if (args.startsAt && args.startsAt < now) {
       return rejection(
         'Could not update Visit Registration because the start date is in the past',
         { args }
