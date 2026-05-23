@@ -5,7 +5,7 @@ import { Field } from 'formik';
 import { DateTime } from 'luxon';
 import React, { useContext } from 'react';
 
-import DatePicker from 'components/common/FormikUIDatePicker';
+import DateTimePicker from 'components/common/FormikUIDateTimePicker';
 import { BasicComponentProps } from 'components/proposal/IBasicComponentProps';
 import {
   createMissingContextErrorMessage,
@@ -27,7 +27,7 @@ function QuestionaryComponentVisitBasis({ answer }: BasicComponentProps) {
     QuestionaryContext
   ) as VisitRegistrationContextType;
   const { format } = useFormattedDateTime({
-    settingsFormatToUse: SettingsId.DATE_FORMAT,
+    settingsFormatToUse: SettingsId.DATE_TIME_FORMAT,
   });
 
   if (!state || !dispatch) {
@@ -42,11 +42,7 @@ function QuestionaryComponentVisitBasis({ answer }: BasicComponentProps) {
         name={`${id}.startsAt`}
         label="Visit start"
         format={format}
-        component={DatePicker}
-        inputProps={{ placeholder: format }}
-        variant="inline"
-        disableToolbar
-        autoOk={true}
+        component={DateTimePicker}
         required
         minDate={DateTime.now()}
         textField={{
@@ -59,7 +55,7 @@ function QuestionaryComponentVisitBasis({ answer }: BasicComponentProps) {
         onChange={(startsAt: DateTime) => {
           dispatch({
             type: 'ITEM_WITH_QUESTIONARY_MODIFIED',
-            itemWithQuestionary: { startsAt },
+            itemWithQuestionary: { startsAt: startsAt.toUTC().toJSDate() },
           });
         }}
         // NOTE: This is needed just because Cypress testing a Material-UI datepicker is not working on Github actions  https://stackoverflow.com/a/69986695/5619063
@@ -69,11 +65,7 @@ function QuestionaryComponentVisitBasis({ answer }: BasicComponentProps) {
         name={`${id}.endsAt`}
         label="Visit end"
         format={format}
-        component={DatePicker}
-        inputProps={{ placeholder: format }}
-        variant="inline"
-        disableToolbar
-        autoOk={true}
+        component={DateTimePicker}
         required
         minDate={state.registration.startsAt}
         textField={{
@@ -86,7 +78,7 @@ function QuestionaryComponentVisitBasis({ answer }: BasicComponentProps) {
         onChange={(endsAt: DateTime) => {
           dispatch({
             type: 'ITEM_WITH_QUESTIONARY_MODIFIED',
-            itemWithQuestionary: { endsAt },
+            itemWithQuestionary: { endsAt: endsAt.toUTC().toJSDate() },
           });
         }}
         // NOTE: This is needed just because Cypress testing a Material-UI datepicker is not working on Github actions  https://stackoverflow.com/a/69986695/5619063
