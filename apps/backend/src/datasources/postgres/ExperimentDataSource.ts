@@ -85,7 +85,15 @@ function generateExperimentId(
 }
 
 const fieldMap: { [key: string]: string } = {
-  experimentId: 'experiment_id',
+  experimentId: 'experiments.experiment_id',
+  proposalId: 'proposals.proposal_id',
+  'proposal.proposalId': 'proposals.proposal_id',
+  startsAt: 'experiments.starts_at',
+  endsAt: 'experiments.ends_at',
+  instrumentName: 'instruments.name',
+  'instrument.name': 'instruments.name',
+  experimentSafetyStatus: 'statuses.name',
+  'experimentSafety.status.name': 'statuses.name',
 };
 
 @injectable()
@@ -584,6 +592,22 @@ export default class PostgresExperimentDataSource
         'proposals.proposal_pk',
         '=',
         'experiments.proposal_pk'
+      )
+      .leftJoin(
+        'instruments',
+        'instruments.instrument_id',
+        '=',
+        'experiments.instrument_id'
+      )
+      .leftJoin(
+        'experiment_safety',
+        'experiments.experiment_pk',
+        'experiment_safety.experiment_pk'
+      )
+      .leftJoin(
+        'statuses',
+        'experiment_safety.status_id',
+        'statuses.status_id'
       );
 
     // Add instrument scientist filtering if provided
@@ -616,16 +640,10 @@ export default class PostgresExperimentDataSource
           query.where('experiments.instrument_id', filter.instrumentId);
         }
         if (filter?.experimentSafetyStatusId) {
-          query
-            .leftJoin(
-              'experiment_safety',
-              'experiments.experiment_pk',
-              'experiment_safety.experiment_pk'
-            )
-            .where(
-              'experiment_safety.status_id',
-              filter?.experimentSafetyStatusId
-            );
+          query.where(
+            'experiment_safety.status_id',
+            filter?.experimentSafetyStatusId
+          );
         }
         if (filter?.callId) {
           query.where('proposals.call_id', filter.callId);
