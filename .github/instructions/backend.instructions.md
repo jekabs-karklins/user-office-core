@@ -3,6 +3,10 @@ description: 'Node.js/Express/GraphQL backend development standards and best pra
 applyTo: 'apps/backend/**/*.ts'
 ---
 
+# Ticket Resolution Instructions
+- Refer to the context provided in our core Copilot Space: https://github.com/copilot/spaces/UserOfficeProject/3
+https://github.com/copilot/spaces/UserOfficeProject/4
+
 # Backend Development Instructions
 
 Instructions for building high-quality backend services with Node.js, Express, GraphQL, and TypeScript following modern patterns, best practices, and dependency injection.
